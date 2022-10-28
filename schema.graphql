@@ -1,0 +1,48 @@
+type TotalMinted @entity {
+  id: ID!
+  total: BigInt!
+}
+
+type TotalPremium @entity {
+  id: ID!
+  vaultAddress: String! # address of vault
+  total: BigInt! # total premium
+}
+
+type CollateralVault @entity {
+  id: ID!
+  address: String! # address of vault
+  tvl: BigInt!
+}
+
+type CollateralVaultRoundPremium @entity {
+  id: ID!
+  vaultAddress: String! # address of collateral vault
+  roundNumber: Int! # round number
+  premium: BigInt! # premium
+}
+
+type VaultRoundAnalytic @entity {
+  id: ID!
+  roundNumber: Int! # round number
+  vaultAddress: String! # address of vault
+  optionAddress: String! # address of option
+  optionsMinted: BigInt! # number of options minted
+  strike: BigInt! # strike price
+  delta: BigInt!
+  collateralVaults: [String!]! # list of collateral vaults that have been used in this round
+  lockedAmounts: [BigInt!] # locked amounts for each neuron pool
+  lockedValue: BigInt! # locked value denominated in strike asset
+  premiumForEachOption: BigInt! # premium for each option
+  premiumRecieved: BigInt!
+  premiumDistributed: [CollateralVaultRoundPremium!]! # list of premiums distributed to each collateral vault
+}
+
+type CollateralVaultRoundAnalytic @entity {
+  id: ID!
+  roundNumber: Int! # round number
+  collateralVaultAddress: String! # address of collateral vault
+  premiumRecieved: BigInt!
+  collateralVaultPricePerShare: BigInt!
+  neuronPoolPricePerShare: BigInt!
+}

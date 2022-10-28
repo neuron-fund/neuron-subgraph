@@ -1,0 +1,56 @@
+{
+  "ThetaVaults": [
+    {
+      "ThetaVaultName": "NeuronThetaVaultBtcCall",
+      "ThetaVaultAddress": "0xd4Bd49E05FCC70A021044bc1Fd6232ee13904474",
+      "CollateralVaults": [
+        {
+          "CollateralVaultName": "NeuronCollateralVaultBtcCallSbtc",
+          "CollateralVaultAddress": "0xE2d9bF5A305a03A5Af9525d4B929a72D6b86072D"
+        }
+      ]
+    },
+    {
+      "ThetaVaultName": "NeuronThetaVaultBtcPut",
+      "ThetaVaultAddress": "0xB5e1fb88DF5427d2C1F6bbd3258b81B1f16Ce2dD",
+      "CollateralVaults": [
+        {
+          "CollateralVaultName": "NeuronCollateralVaultBtcPutFrax",
+          "CollateralVaultAddress": "0x78354687431BaF54B2C84c1951f11720501CE79a"
+        },
+        {
+          "CollateralVaultName": "NeuronCollateralVaultBtcPutMim",
+          "CollateralVaultAddress": "0xC1916EfaC1efBB0BD51349b63809900c2E908273"
+        }
+      ]
+    },
+    {
+      "ThetaVaultName": "NeuronThetaVaultEthCall",
+      "ThetaVaultAddress": "0x7FD0a65AC12DCF5584b1520C5191Df4bE336a072",
+      "CollateralVaults": [
+        {
+          "CollateralVaultName": "NeuronCollateralVaultEthCallAleth",
+          "CollateralVaultAddress": "0xB0F1a8fd498c40503fd8c3cc5e48083A4330c231"
+        },
+        {
+          "CollateralVaultName": "NeuronCollateralVaultEthCallSteth",
+          "CollateralVaultAddress": "0xE5044023BE16E06e396aCcc9af8D22e2BA12910d"
+        }
+      ]
+    },
+    {
+      "ThetaVaultName": "NeuronThetaVaultEthPut",
+      "ThetaVaultAddress": "0xb92eE2B04d07531A91A6deaB56d65732B69AaF81",
+      "CollateralVaults": [
+        {
+          "CollateralVaultName": "NeuronCollateralVaultEthPutFrax",
+          "CollateralVaultAddress": "0x4961D75c91A839C32A76EDE615096a8963b8270a"
+        },
+        {
+          "CollateralVaultName": "NeuronCollateralVaultEthPutMim",
+          "CollateralVaultAddress": "0xc71124cee520F94d5d07c95cE6E61f7518A07e90"
+        }
+      ]
+    }
+  ]
+}

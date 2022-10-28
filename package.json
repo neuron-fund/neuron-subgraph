@@ -1,0 +1,18 @@
+{
+  "name": "neuron",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "npm run codegen:subgraph && graph codegen",
+    "codegen:subgraph": "npx mustache subgraph.template.data.json subgraph.template.yaml > subgraph.yaml",
+    "build": "graph build",
+    "deploy": "graph deploy --product hosted-service avele/neuron",
+    "create-local": "graph create --node http://localhost:8020/ avele/neuron",
+    "remove-local": "graph remove --node http://localhost:8020/ avele/neuron",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 avele/neuron"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.22.0",
+    "@graphprotocol/graph-ts": "0.22.0",
+    "mustache": "^4.2.0"
+  }
+}
