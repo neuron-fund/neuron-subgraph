@@ -24,6 +24,7 @@ type CollateralVaultRoundPremium @entity {
 
 type VaultRoundAnalytic @entity {
   id: ID!
+  optionExpiryTimestamp: BigInt! # option expiry timestamp
   roundNumber: Int! # round number
   vaultAddress: String! # address of vault
   optionAddress: String! # address of option

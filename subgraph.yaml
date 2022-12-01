@@ -21,6 +21,8 @@ dataSources:
       abis:
         - name: NeuronThetaVault
           file: ./abis/NeuronThetaVault.json
+        - name: ONToken
+          file: ./abis/ONToken.json
       eventHandlers:
         - event: OpenShort(indexed uint16,indexed address,uint256,address[],uint256[],uint256,indexed address)
           handler: handleOpenShort
@@ -101,6 +103,8 @@ dataSources:
       abis:
         - name: NeuronThetaVault
           file: ./abis/NeuronThetaVault.json
+        - name: ONToken
+          file: ./abis/ONToken.json
       eventHandlers:
         - event: OpenShort(indexed uint16,indexed address,uint256,address[],uint256[],uint256,indexed address)
           handler: handleOpenShort
@@ -210,6 +214,8 @@ dataSources:
       abis:
         - name: NeuronThetaVault
           file: ./abis/NeuronThetaVault.json
+        - name: ONToken
+          file: ./abis/ONToken.json
       eventHandlers:
         - event: OpenShort(indexed uint16,indexed address,uint256,address[],uint256[],uint256,indexed address)
           handler: handleOpenShort
@@ -319,6 +325,8 @@ dataSources:
       abis:
         - name: NeuronThetaVault
           file: ./abis/NeuronThetaVault.json
+        - name: ONToken
+          file: ./abis/ONToken.json
       eventHandlers:
         - event: OpenShort(indexed uint16,indexed address,uint256,address[],uint256[],uint256,indexed address)
           handler: handleOpenShort

@@ -12,6 +12,7 @@ import {
   CloseShort,
   NeuronCollateralVault,
 } from '../generated/NeuronCollateralVault/NeuronCollateralVault'
+import {ONToken} from '../generated/NeuronThetaVaultEthPut/ONToken'
 import {
   CollateralVault,
   CollateralVaultRoundAnalytic,
@@ -72,6 +73,11 @@ export function handleOpenShort(event: OpenShort): void {
     throw new Error(`handleOpenShort: VaultRoundAnalytic not found for ${id}`)
   }
 
+  const onToken = ONToken.bind(optionAddress)
+  const optionExpiryTimestamp = onToken.expiryTimestamp()
+
+  vaultRoundAnalytic.optionExpiryTimestamp = optionExpiryTimestamp
+  vaultRoundAnalytic.optionAddress = optionAddress.toHexString()
   vaultRoundAnalytic.lockedAmounts = lockedCollateralAmounts
   vaultRoundAnalytic.lockedValue = totalLockedCollateralValue
   vaultRoundAnalytic.optionAddress = optionAddress.toHexString()
