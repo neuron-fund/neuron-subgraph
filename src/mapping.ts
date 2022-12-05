@@ -1,4 +1,4 @@
-import {Address, log} from '@graphprotocol/graph-ts'
+import {Address, BigInt} from '@graphprotocol/graph-ts'
 import {
   NextRoundParamsSelected,
   OpenShort,
@@ -12,14 +12,20 @@ import {
   CloseShort,
   NeuronCollateralVault,
 } from '../generated/NeuronCollateralVault/NeuronCollateralVault'
-import {ONToken} from '../generated/NeuronThetaVaultEthPut/ONToken'
 import {
   CollateralVault,
   CollateralVaultRoundAnalytic,
   CollateralVaultRoundPremium,
+  NeuronPoolsPrice,
   VaultRoundAnalytic,
 } from '../generated/schema'
+import {ONToken} from '../generated/NeuronThetaVaultEthPut/ONToken'
+import {Oracle} from '../generated/NeuronThetaVaultEthPut/Oracle'
 import {INeuronPool} from '../generated/templates/NeuronCollateralVault/INeuronPool'
+
+const ORACLE_ADDRESS = Address.fromString(
+  '0xf0b7A1Bd858Cc8d6F09694D7cEf3b6a504f0804E'
+)
 
 const getIdFromRoundAndAddress = (round: number, address: Address): string => {
   return `${round}-${address.toHexString()}`
@@ -31,6 +37,27 @@ const getIdFromRoundNameAndAddress = (
   address: Address
 ): string => {
   return `${name}-${round}-${address.toHexString()}`
+}
+
+const getIdForNeuronPoolPrice = (
+  address: Address,
+  timestamp: BigInt
+): string => {
+  return `${address.toHexString()}-${timestamp.toString()}`
+}
+
+const createNeuronPoolPrice = (address: Address, timestamp: BigInt): string => {
+  const oracle = Oracle.bind(ORACLE_ADDRESS)
+  const price = oracle.getPrice(address)
+
+  const id = getIdForNeuronPoolPrice(address, timestamp)
+  const neuronPoolPrice = new NeuronPoolsPrice(id)
+  neuronPoolPrice.address = address.toHexString()
+  neuronPoolPrice.price = price
+  neuronPoolPrice.timestamp = timestamp
+  neuronPoolPrice.save()
+
+  return id
 }
 
 export function handleNextRoundParamsSelected(
@@ -65,6 +92,8 @@ export function handleOpenShort(event: OpenShort): void {
   const collateralVaults = event.params.collateralVaults
   const roundNumber = event.params.roundNumber
 
+  const blockTimestamp = event.block.timestamp
+
   const id = getIdFromRoundAndAddress(roundNumber, vaultAddress)
 
   const vaultRoundAnalytic = VaultRoundAnalytic.load(id)
@@ -82,12 +111,19 @@ export function handleOpenShort(event: OpenShort): void {
   vaultRoundAnalytic.lockedValue = totalLockedCollateralValue
   vaultRoundAnalytic.optionAddress = optionAddress.toHexString()
   vaultRoundAnalytic.optionsMinted = optionMintedAmount
+
   const collateralVaultsStrings: string[] = []
-  log.info('handleOpenShort ~ collateralVaults.length {}', [
-    collateralVaults.length.toString(),
-  ])
+
   for (let i = 0; i < collateralVaults.length; i++) {
-    log.info('collateral vault {}', [collateralVaults[i].toHexString()])
+    const collateralVault = NeuronCollateralVault.bind(collateralVaults[i])
+    const collateralVaultNeuronPoolAddress = collateralVault.collateralToken()
+
+    const neuronPoolPriceId = createNeuronPoolPrice(
+      collateralVaultNeuronPoolAddress,
+      blockTimestamp
+    )
+
+    vaultRoundAnalytic.neuronPoolsPricesRoundStart.push(neuronPoolPriceId)
     collateralVaultsStrings.push(collateralVaults[i].toHexString())
   }
 
@@ -136,13 +172,27 @@ export function handlePremiumDistribute(event: PremiumDistribute): void {
     vaultAddress
   )
   const vaultRoundAnalytic = VaultRoundAnalytic.load(vaultRoundAnalyticId)
+  const blockTimestamp = event.block.timestamp
 
   if (vaultRoundAnalytic == null) {
     throw new Error(
       `handlePremiumForRound: VaultRoundAnalytic not found for ${vaultRoundAnalyticId}`
     )
   }
+  const collateralVaults = vaultRoundAnalytic.collateralVaults
 
+  for (let i = 0; i < collateralVaults.length; i++) {
+    const collateralVault = NeuronCollateralVault.bind(
+      Address.fromString(collateralVaults[i])
+    )
+    const collateralVaultNeuronPoolAddress = collateralVault.collateralToken()
+    const neuronPoolPriceId = createNeuronPoolPrice(
+      collateralVaultNeuronPoolAddress,
+      blockTimestamp
+    )
+
+    vaultRoundAnalytic.neuronPoolsPricesRoundEnd.push(neuronPoolPriceId)
+  }
   const collateralVaultRoundPremiumId = getIdFromRoundAndAddress(
     roundNumber,
     collateralVaultAddress
@@ -156,10 +206,6 @@ export function handlePremiumDistribute(event: PremiumDistribute): void {
   collateralVaultRoundPremium.roundNumber = roundNumber
 
   collateralVaultRoundPremium.save()
-
-  log.info('handlePremiumDistribute ~ collateralVaultRoundPremiumAmount {}', [
-    amount.toHexString(),
-  ])
 
   const premiumDistributed = vaultRoundAnalytic.premiumDistributed
 

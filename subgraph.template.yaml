@@ -24,6 +24,10 @@ dataSources:
           file: ./abis/NeuronThetaVault.json
         - name: ONToken
           file: ./abis/ONToken.json
+        - name: INeuronPool
+          file: ./abis/INeuronPool.json
+        - name: Oracle
+          file: ./abis/Oracle.json
       eventHandlers:
         - event: OpenShort(indexed uint16,indexed address,uint256,address[],uint256[],uint256,indexed address)
           handler: handleOpenShort
