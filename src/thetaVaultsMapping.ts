@@ -5,46 +5,19 @@ import {
   PremiumDistribute,
   PremiumForRound,
 } from '../generated/NeuronThetaVault/NeuronThetaVault'
+import {NeuronCollateralVault} from '../generated/NeuronCollateralVault/NeuronCollateralVault'
 import {
-  Deposit,
-  InstantWithdraw,
-  Withdraw,
-  CloseShort,
-  NeuronCollateralVault,
-} from '../generated/NeuronCollateralVault/NeuronCollateralVault'
-import {
-  CollateralVault,
-  CollateralVaultRoundAnalytic,
   CollateralVaultRoundPremium,
   NeuronPoolsPrice,
   VaultRoundAnalytic,
 } from '../generated/schema'
 import {ONToken} from '../generated/NeuronThetaVaultEthPut/ONToken'
 import {Oracle} from '../generated/NeuronThetaVaultEthPut/Oracle'
-import {INeuronPool} from '../generated/templates/NeuronCollateralVault/INeuronPool'
-
-const ORACLE_ADDRESS = Address.fromString(
-  '0xf0b7A1Bd858Cc8d6F09694D7cEf3b6a504f0804E'
-)
-
-const getIdFromRoundAndAddress = (round: number, address: Address): string => {
-  return `${round}-${address.toHexString()}`
-}
-
-const getIdFromRoundNameAndAddress = (
-  name: string,
-  round: number,
-  address: Address
-): string => {
-  return `${name}-${round}-${address.toHexString()}`
-}
-
-const getIdForNeuronPoolPrice = (
-  address: Address,
-  timestamp: BigInt
-): string => {
-  return `${address.toHexString()}-${timestamp.toString()}`
-}
+import {
+  getIdForNeuronPoolPrice,
+  getIdFromRoundAndAddress,
+  ORACLE_ADDRESS,
+} from './utils'
 
 const createNeuronPoolPrice = (address: Address, timestamp: BigInt): string => {
   const oracle = Oracle.bind(ORACLE_ADDRESS)
@@ -214,124 +187,4 @@ export function handlePremiumDistribute(event: PremiumDistribute): void {
   vaultRoundAnalytic.premiumDistributed = premiumDistributed
 
   vaultRoundAnalytic.save()
-}
-
-export function handleCollateralVaultDeposit(event: Deposit): void {
-  const collateralVaultAddress = event.address
-
-  let collateralVaultEntity = CollateralVault.load(
-    collateralVaultAddress.toHexString()
-  )
-
-  if (collateralVaultEntity == null) {
-    collateralVaultEntity = new CollateralVault(
-      collateralVaultAddress.toHexString()
-    )
-    collateralVaultEntity.address = collateralVaultAddress.toHexString()
-    collateralVaultEntity.save()
-  }
-
-  const collateralVault = NeuronCollateralVault.bind(collateralVaultAddress)
-
-  const totalBalance = collateralVault.totalBalance()
-
-  collateralVaultEntity.tvl = totalBalance
-  collateralVaultEntity.save()
-}
-export function handleCollateralVaultInstantWithdraw(
-  event: InstantWithdraw
-): void {
-  const collateralVaultAddress = event.address
-
-  let collateralVaultEntity = CollateralVault.load(
-    collateralVaultAddress.toHexString()
-  )
-
-  if (collateralVaultEntity == null) {
-    collateralVaultEntity = new CollateralVault(
-      collateralVaultAddress.toHexString()
-    )
-    collateralVaultEntity.address = collateralVaultAddress.toHexString()
-    collateralVaultEntity.save()
-  }
-
-  const collateralVault = NeuronCollateralVault.bind(collateralVaultAddress)
-
-  const totalBalance = collateralVault.totalBalance()
-
-  collateralVaultEntity.tvl = totalBalance
-  collateralVaultEntity.save()
-}
-export function handleCollateralVaultWithdraw(event: Withdraw): void {
-  const collateralVaultAddress = event.address
-
-  let collateralVaultEntity = CollateralVault.load(
-    collateralVaultAddress.toHexString()
-  )
-
-  if (collateralVaultEntity == null) {
-    collateralVaultEntity = new CollateralVault(
-      collateralVaultAddress.toHexString()
-    )
-    collateralVaultEntity.address = collateralVaultAddress.toHexString()
-    collateralVaultEntity.save()
-  }
-
-  const collateralVault = NeuronCollateralVault.bind(collateralVaultAddress)
-
-  const totalBalance = collateralVault.totalBalance()
-
-  collateralVaultEntity.tvl = totalBalance
-  collateralVaultEntity.save()
-}
-export function handleCollateralVaultCloseShort(event: CloseShort): void {
-  const collateralVaultAddress = event.address
-  const round = event.params.round
-  const premium = event.params.premium
-
-  const collateralVault = NeuronCollateralVault.bind(collateralVaultAddress)
-  const neuronPoolAddress = collateralVault.collateralToken()
-  const neuronPool = INeuronPool.bind(neuronPoolAddress)
-
-  let collateralVaultEntity = CollateralVault.load(
-    collateralVaultAddress.toHexString()
-  )
-
-  if (collateralVaultEntity == null) {
-    collateralVaultEntity = new CollateralVault(
-      collateralVaultAddress.toHexString()
-    )
-    collateralVaultEntity.address = collateralVaultAddress.toHexString()
-    collateralVaultEntity.save()
-  }
-
-  const collateralVaultRoundAnalyticId = getIdFromRoundNameAndAddress(
-    'collateralVaultRoundAnalytic',
-    round,
-    collateralVaultAddress
-  )
-
-  let collateralVaultRoundAnalyticEntity = CollateralVaultRoundAnalytic.load(
-    collateralVaultRoundAnalyticId
-  )
-
-  if (collateralVaultRoundAnalyticEntity == null) {
-    collateralVaultRoundAnalyticEntity = new CollateralVaultRoundAnalytic(
-      collateralVaultRoundAnalyticId
-    )
-  }
-
-  const totalBalance = collateralVault.totalBalance()
-  const collateralVaultPricePerShare = collateralVault.pricePerShare()
-  const neuronPoolPricePerShare = neuronPool.pricePerShare()
-
-  collateralVaultEntity.tvl = totalBalance
-  collateralVaultEntity.save()
-
-  collateralVaultRoundAnalyticEntity.collateralVaultAddress = collateralVaultAddress.toHexString()
-  collateralVaultRoundAnalyticEntity.roundNumber = round
-  collateralVaultRoundAnalyticEntity.collateralVaultPricePerShare = collateralVaultPricePerShare
-  collateralVaultRoundAnalyticEntity.neuronPoolPricePerShare = neuronPoolPricePerShare
-  collateralVaultRoundAnalyticEntity.premiumRecieved = premium
-  collateralVaultRoundAnalyticEntity.save()
 }

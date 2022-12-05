@@ -22,6 +22,8 @@ dataSources:
       abis:
         - name: NeuronThetaVault
           file: ./abis/NeuronThetaVault.json
+        - name: NeuronCollateralVault
+          file: ./abis/NeuronCollateralVault.json
         - name: ONToken
           file: ./abis/ONToken.json
         - name: INeuronPool
@@ -61,7 +63,7 @@ dataSources:
         #   handler: handleAll
         # - event: PremiumDistribute(indexed address,uint256)
         #   handler: handleAll
-      file: ./src/mapping.ts
+      file: ./src/thetaVaultsMapping.ts
   {{#CollateralVaults}}
   - kind: ethereum/contract
     name: {{CollateralVaultName}}
@@ -91,6 +93,6 @@ dataSources:
           handler: handleCollateralVaultWithdraw
         - event: CloseShort(indexed uint16,uint256)
           handler: handleCollateralVaultCloseShort
-      file: ./src/mapping.ts
+      file: ./src/collateralVaultsMapping.ts
   {{/CollateralVaults}}
 {{/ThetaVaults}}

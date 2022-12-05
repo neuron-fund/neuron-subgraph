@@ -21,6 +21,8 @@ dataSources:
       abis:
         - name: NeuronThetaVault
           file: ./abis/NeuronThetaVault.json
+        - name: NeuronCollateralVault
+          file: ./abis/NeuronCollateralVault.json
         - name: ONToken
           file: ./abis/ONToken.json
         - name: INeuronPool
@@ -60,7 +62,7 @@ dataSources:
         #   handler: handleAll
         # - event: PremiumDistribute(indexed address,uint256)
         #   handler: handleAll
-      file: ./src/mapping.ts
+      file: ./src/thetaVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronCollateralVaultBtcCallSbtc
     network: mainnet
@@ -89,7 +91,7 @@ dataSources:
           handler: handleCollateralVaultWithdraw
         - event: CloseShort(indexed uint16,uint256)
           handler: handleCollateralVaultCloseShort
-      file: ./src/mapping.ts
+      file: ./src/collateralVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronThetaVaultBtcPut
     network: mainnet
@@ -107,6 +109,8 @@ dataSources:
       abis:
         - name: NeuronThetaVault
           file: ./abis/NeuronThetaVault.json
+        - name: NeuronCollateralVault
+          file: ./abis/NeuronCollateralVault.json
         - name: ONToken
           file: ./abis/ONToken.json
         - name: INeuronPool
@@ -146,7 +150,7 @@ dataSources:
         #   handler: handleAll
         # - event: PremiumDistribute(indexed address,uint256)
         #   handler: handleAll
-      file: ./src/mapping.ts
+      file: ./src/thetaVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronCollateralVaultBtcPutFrax
     network: mainnet
@@ -175,7 +179,7 @@ dataSources:
           handler: handleCollateralVaultWithdraw
         - event: CloseShort(indexed uint16,uint256)
           handler: handleCollateralVaultCloseShort
-      file: ./src/mapping.ts
+      file: ./src/collateralVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronCollateralVaultBtcPutMim
     network: mainnet
@@ -204,7 +208,7 @@ dataSources:
           handler: handleCollateralVaultWithdraw
         - event: CloseShort(indexed uint16,uint256)
           handler: handleCollateralVaultCloseShort
-      file: ./src/mapping.ts
+      file: ./src/collateralVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronThetaVaultEthCall
     network: mainnet
@@ -222,6 +226,8 @@ dataSources:
       abis:
         - name: NeuronThetaVault
           file: ./abis/NeuronThetaVault.json
+        - name: NeuronCollateralVault
+          file: ./abis/NeuronCollateralVault.json
         - name: ONToken
           file: ./abis/ONToken.json
         - name: INeuronPool
@@ -261,7 +267,7 @@ dataSources:
         #   handler: handleAll
         # - event: PremiumDistribute(indexed address,uint256)
         #   handler: handleAll
-      file: ./src/mapping.ts
+      file: ./src/thetaVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronCollateralVaultEthCallAleth
     network: mainnet
@@ -290,7 +296,7 @@ dataSources:
           handler: handleCollateralVaultWithdraw
         - event: CloseShort(indexed uint16,uint256)
           handler: handleCollateralVaultCloseShort
-      file: ./src/mapping.ts
+      file: ./src/collateralVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronCollateralVaultEthCallSteth
     network: mainnet
@@ -319,7 +325,7 @@ dataSources:
           handler: handleCollateralVaultWithdraw
         - event: CloseShort(indexed uint16,uint256)
           handler: handleCollateralVaultCloseShort
-      file: ./src/mapping.ts
+      file: ./src/collateralVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronThetaVaultEthPut
     network: mainnet
@@ -337,6 +343,8 @@ dataSources:
       abis:
         - name: NeuronThetaVault
           file: ./abis/NeuronThetaVault.json
+        - name: NeuronCollateralVault
+          file: ./abis/NeuronCollateralVault.json
         - name: ONToken
           file: ./abis/ONToken.json
         - name: INeuronPool
@@ -376,7 +384,7 @@ dataSources:
         #   handler: handleAll
         # - event: PremiumDistribute(indexed address,uint256)
         #   handler: handleAll
-      file: ./src/mapping.ts
+      file: ./src/thetaVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronCollateralVaultEthPutFrax
     network: mainnet
@@ -405,7 +413,7 @@ dataSources:
           handler: handleCollateralVaultWithdraw
         - event: CloseShort(indexed uint16,uint256)
           handler: handleCollateralVaultCloseShort
-      file: ./src/mapping.ts
+      file: ./src/collateralVaultsMapping.ts
   - kind: ethereum/contract
     name: NeuronCollateralVaultEthPutMim
     network: mainnet
@@ -434,4 +442,4 @@ dataSources:
           handler: handleCollateralVaultWithdraw
         - event: CloseShort(indexed uint16,uint256)
           handler: handleCollateralVaultCloseShort
-      file: ./src/mapping.ts
+      file: ./src/collateralVaultsMapping.ts
